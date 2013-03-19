@@ -220,6 +220,24 @@ abstract class Path {
     /**
      * @return array
      */
+    public static function affix(array $list, $prefix = '', $suffix = '') {
+        foreach ($list as &$n)
+            $n = $prefix . $n . $suffix;
+        return $list;
+    }
+    
+    /**
+     * @param  string  $path
+     * @param  string  $infix   text to insert before file extension
+     * @return array
+     */
+    public static function infix($path, $infix) {
+        return \preg_replace('#(\.[a-z0-9]+)$#i', "$infix$1", $path);
+    }
+
+    /**
+     * @return array
+     */
     public static function group(array $list) {
         $levels = array(); #map
         foreach ($list as $i => $n)
@@ -236,6 +254,14 @@ abstract class Path {
      */
     public static function sort(array $list) {
         return \call_user_func_array('array_merge', \array_reverse(static::group($list)));
+    }
+    
+    /**
+     * Get the first readable path from the supplied args.
+     * @return array
+     */
+    public static function locate() {
+        return static::find(\func_get_args(), 'is_readable');
     }
     
     /**
@@ -267,7 +293,6 @@ abstract class Path {
     public static function findDir($path, callable $test) {
         return static::find(static::listDirs($path), $test);
     }
-
     
     /** 
      * @return mixed
