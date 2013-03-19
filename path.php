@@ -132,6 +132,14 @@ abstract class Path {
     }
     
     /**
+     * @return  bool
+     */
+    public static function inc($path) {
+        ($bool = static::isFile($path)) and include $path;
+        return $bool;
+    }
+
+    /**
      * Get the modified time of a file or a directory. For directories,
      * it gets the modified time of the most recently modified file.
      * @param   string       $path     Full path to directory or file.
@@ -186,7 +194,7 @@ abstract class Path {
     public static function toAbs($item) {
         return \is_scalar($item) ? \realpath($item) : false;
     }
-    
+
     /**
      * @param   string   $path 
      * @param   string   $scheme 
