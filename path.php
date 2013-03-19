@@ -148,43 +148,43 @@ abstract class Path {
      * @return  bool
      */
     public static function isPath($item) {
-        return \ctype_print($item) && \file_exists($item);
+        return \is_scalar($item) && \file_exists($item);
     }
     
     /**
      * @return  bool
      */
     public static function isDir($item) {
-        return \ctype_print($item) && \is_dir($item);
+        return \is_scalar($item) && \is_dir($item);
     }
     
     /**
      * @return  bool
      */
     public static function isFile($item) {
-        return \ctype_print($item) && \is_file($item);
+        return \is_scalar($item) && \is_file($item);
     }
 
     /**
-     * Test if item consists entirely of dots 
+     * Test if item is a dot folder name
      * @return  bool
      */
     public static function isDot($item) {
-        return \ctype_punct($item) && !\ltrim($item, '.');
+        return '.' === $item || '..' === $item;
     }
     
     /**
      * @return  bool
      */
     public static function isAbs($item) {
-        return \ctype_print($item) && \realpath($item) === $item;
+        return \is_scalar($item) && \realpath($item) === $item;
     }
     
     /**
      * @return  string|bool
      */
     public static function toAbs($item) {
-        return \ctype_print($item) ? \realpath($item) : false;
+        return \is_scalar($item) ? \realpath($item) : false;
     }
     
     /**
@@ -384,7 +384,7 @@ abstract class Path {
      * @return mixed
      */
     public static function putFile($path, $data) {
-        return \ctype_print($path) ? \file_put_contents($path, 
+        return null === $path ? \file_put_contents($path, 
             $data instanceof \Closure ? $data(static::getFile($path)) : $data
         ) : false;
     }
@@ -402,7 +402,7 @@ abstract class Path {
      * @return mixed
      */
     public static function putJson($path, $data) {
-        if ( ! \ctype_print($path))
+        if (null === $path)
             return false;
         $data instanceof \Closure and $data = $data(static::getJson($path));
         return \file_put_contents($path, \is_string($data) ? $data : \json_encode($data));
