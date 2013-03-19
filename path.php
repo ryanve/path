@@ -187,9 +187,27 @@ abstract class Path {
      * @param   string   $scheme 
      * @return  string
      */
-    public static function toUri($path = '', $scheme = 'http') {
-        $uri = ($scheme ? $scheme . '://' : '//') . $_SERVER['SERVER_NAME'];
+    public static function toUri($path = '', $scheme = null) {
+        $uri = ($scheme && \is_string($scheme) ? $scheme . '://' : '//') . $_SERVER['SERVER_NAME'];
         return $uri . static::lslash(\str_replace($_SERVER['DOCUMENT_ROOT'], '', $path));
+    }
+    
+    /**
+     * @param   string   $path 
+     * @param   string   $scheme 
+     * @return  string
+     */
+    public static function toUrl($path, $scheme = null) {
+        \is_string($scheme) or $scheme = static::isHttps() ? 'https' : 'http';
+        return static::toUri($path, $scheme);
+    }
+    
+    /**
+     * @return  bool
+     */
+    protected static function isHttps() {
+        return !empty($_SERVER['HTTPS']) and 'off' !== $_SERVER['HTTPS']
+            or !empty($_SERVER['SERVER_PORT']) and  443 == $_SERVER['SERVER_PORT'];
     }
 
     /**
