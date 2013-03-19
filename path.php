@@ -39,9 +39,8 @@ abstract class Path {
      * @return  string
      */
     public static function methods() {
-        return \array_merge(\array_keys(static::$mixins), \get_class_methods(__CLASS__));
-        #$methods = \array_merge(\array_keys(static::$mixins), \get_class_methods(__CLASS__));
-        #return \array_combine($methods, \array_map(__CLASS__ . '::method', $methods));
+        $methods = \get_class_methods(__CLASS__);
+        return \array_merge($methods, \array_diff(\array_keys(static::$mixins), $methods));
     }
     
     /**
