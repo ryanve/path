@@ -152,6 +152,22 @@ abstract class Path {
     public static function toAbs($item) {
         return \ctype_print($item) ? \realpath($item) : false;
     }
+    
+    /**
+     * Get a associative array containing the dir structure
+     * @return array
+     */
+    public static function tree($path) {
+        $list = array();
+        $base = static::rslash($path);
+        foreach (\is_array($path) ? $path : static::listPaths($path) as $n) {
+            if (\is_dir($dir = $base . $n)) {
+                # add slash to prevent integer index conflicts
+                $list["/$n"] = static::tree($dir);
+            } else { $list[] = $n; }
+        }
+        return $list;
+    }
 
     /**
      * @return array
