@@ -90,7 +90,7 @@ abstract class Path {
      * @return  array
      */
     public static function split($path) {
-        $path = \ltrim(static::normalize($path), '/');
+        $path = \trim(static::normalize($path), '/');
         return '' === $path ? array() : \explode('/', $path);
     }
     
@@ -107,7 +107,7 @@ abstract class Path {
      * @return  string
      */
     public static function normalize($path) {
-        return \rtrim(\str_replace('\\', '/', $path), '/');
+        return \str_replace('\\', '/', $path);
     }
     
     /**
@@ -237,7 +237,7 @@ abstract class Path {
     public static function listPaths($path) {
         $list = array();
         foreach (\scandir($path) as $n)
-            static::isDot($n) or $list[] = $n;
+            static::isDot($n) or $list[] = static::normalize($n);
         return $list;
     }
     
