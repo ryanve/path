@@ -264,6 +264,13 @@ abstract class Path {
     }
     
     /**
+     * @return object
+     */
+    public static function iterator($path) {
+        return new \DirectoryIterator($path);
+    }
+    
+    /**
      * @return array
      */
     public static function affix(array $list, $prefix = '', $suffix = '') {
