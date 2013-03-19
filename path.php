@@ -211,8 +211,8 @@ abstract class Path {
      * @return  bool
      */
     public static function isHttps() {
-        return !empty($_SERVER['HTTPS']) and 'off' !== $_SERVER['HTTPS']
-            or !empty($_SERVER['SERVER_PORT']) and  443 == $_SERVER['SERVER_PORT'];
+        return !empty($_SERVER['HTTPS']) and 'off' !== \strtolower($_SERVER['HTTPS'])
+            or !empty($_SERVER['SERVER_PORT']) and 443 == $_SERVER['SERVER_PORT'];
     }
 
     /**
