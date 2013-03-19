@@ -225,7 +225,7 @@ abstract class Path {
         foreach (static::listPaths($path) as $n) {
             if (\is_dir($dir = $base . $n)) {
                 # add slash to prevent integer index conflicts
-                $list["/$n"] = static::tree($dir);
+                $list["$n/"] = static::tree($dir);
             } else { $list[] = $n; }
         }
         return $list;
