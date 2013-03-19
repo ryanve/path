@@ -255,7 +255,7 @@ abstract class Path {
      * @return array
      */
     public static function infix($path, $infix) {
-        return \preg_replace('#(\.[a-z0-9]+)$#i', "$infix$1", $path);
+        return \preg_replace('#(\.\w+)$#', "$infix$1", $path);
     }
 
     /**
