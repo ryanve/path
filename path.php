@@ -80,6 +80,30 @@ abstract class Path {
     }
     
     /**
+     * @return  array
+     */
+    public static function split($path) {
+        $path = \trim(static::normalize($path), '/');
+        return '' === $path ? array() : \explode('/', $path);
+    }
+    
+    /**
+     * @return  string|null
+     */
+    public static function part($path, $idx = 0) {
+        \is_array($path) or $path = static::split($path);
+        $idx = 0 > $idx ? \count($path) + $idx : (int) $idx;
+        return isset($path[$idx]) ? $path[$idx] : null;
+    }
+    
+    /**
+     * @return  string
+     */
+    public static function normalize($path) {
+        return \rtrim(\str_replace('\\', '/', $path), '/');
+    }
+    
+    /**
      * @return  string
      */   
     public static function root($pathRelative) {
