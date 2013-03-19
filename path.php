@@ -217,7 +217,7 @@ abstract class Path {
     public static function tree($path) {
         $list = array();
         $base = static::rslash($path);
-        foreach (\is_scalar($path) ? static::listPaths($path) : $path as $n) {
+        foreach (static::listPaths($path) as $n) {
             if (\is_dir($dir = $base . $n)) {
                 # add slash to prevent integer index conflicts
                 $list["/$n"] = static::tree($dir);
