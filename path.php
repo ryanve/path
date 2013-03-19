@@ -384,7 +384,7 @@ abstract class Path {
      * @return mixed
      */
     public static function putFile($path, $data) {
-        return null === $path ? \file_put_contents($path, 
+        return null !== $path ? \file_put_contents($path, 
             $data instanceof \Closure ? $data(static::getFile($path)) : $data
         ) : false;
     }
