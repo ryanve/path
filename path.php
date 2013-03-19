@@ -121,21 +121,21 @@ abstract class Path {
      * @return  bool
      */
     public static function isPath($item) {
-        return \ctype_print($item) && \is_readable($item);
+        return \ctype_print($item) && \file_exists($item);
     }
     
     /**
      * @return  bool
      */
     public static function isDir($item) {
-        return static::isPath($item) && \is_dir($item);
+        return \ctype_print($item) && \is_dir($item);
     }
     
     /**
      * @return  bool
      */
     public static function isFile($item) {
-        return static::isPath($item) && ! \is_dir($item);
+        return \ctype_print($item) && \is_file($item);
     }
 
     /**
