@@ -80,7 +80,7 @@ abstract class Path {
             $result = $result ? \rtrim($result, static::delims) . '/' . \ltrim($n, static::delims) : $n;
         return $result;
     }
-    
+
     /**
      * @return  array
      */
@@ -205,7 +205,7 @@ abstract class Path {
     /**
      * @return  bool
      */
-    protected static function isHttps() {
+    public static function isHttps() {
         return !empty($_SERVER['HTTPS']) and 'off' !== $_SERVER['HTTPS']
             or !empty($_SERVER['SERVER_PORT']) and  443 == $_SERVER['SERVER_PORT'];
     }
