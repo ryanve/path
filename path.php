@@ -297,7 +297,7 @@ abstract class Path {
     /**
      * @param  string  $path
      * @param  string  $infix   text to insert before file extension
-     * @return array
+     * @return string
      */
     public static function infix($path, $infix) {
         return \preg_replace('#(\.\w+)$#', "$infix$1", $path);
@@ -326,7 +326,7 @@ abstract class Path {
     
     /**
      * Get the first existent path from the supplied args.
-     * @return array
+     * @return mixed
      */
     public static function locate() {
         return static::find(\func_get_args(), static::method('isPath'));
@@ -369,21 +369,21 @@ abstract class Path {
     }
     
     /** 
-     * @return string
+     * @return string|null
      */
     public static function findPath($path, callable $test) {
         return static::find(static::listPaths($path), $test);
     }
     
     /** 
-     * @return string
+     * @return string|null
      */    
     public static function findFile($path, callable $test) {
         return static::find(static::listFiles($path), $test);
     }
     
     /** 
-     * @return string
+     * @return string|null
      */
     public static function findDir($path, callable $test) {
         return static::find(static::listDirs($path), $test);
