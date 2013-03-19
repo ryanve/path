@@ -25,7 +25,7 @@ abstract class Path {
         if (\is_scalar($name))
             $fn and static::$mixins[$name] = $fn;
         else foreach ($name as $k => $v)
-            static::mixin($k, $v);
+            self::mixin($k, $v);
     }
     
     /**
