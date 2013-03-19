@@ -15,12 +15,18 @@ abstract class Path {
     
     protected static $mixins = array();
     
+    /**
+     * @method
+     */
     public static function __callStatic($name, $params) {
         if (isset(static::$mixins[$name]))
             return \call_user_func_array(static::$mixins[$name], $params);
         \trigger_error(__CLASS__ . "::$name is not callable.");
     }
 
+    /**
+     * Mixin custom static methods.
+     */
     public static function mixin($name, $fn = null) {
         if (\is_scalar($name))
             $fn and static::$mixins[$name] = $fn;
@@ -29,6 +35,7 @@ abstract class Path {
     }
     
     /**
+     * Fully-qualify a method name (for callback use).
      * @param   string  $name
      * @return  string
      */
@@ -352,10 +359,11 @@ abstract class Path {
     }
     
     /**
+     * Get the first $list item than passes $test
      * @return  mixed
      */
     public function find($list, callable $test) {
-        foreach($list as $k => $v)
+        foreach ($list as $k => $v)
             if (\call_user_func($test, $v, $k, $list))
                 return $v;
     }
