@@ -10,6 +10,8 @@
 namespace airve;
 
 abstract class Path {
+
+    const delims = '/\\';
     
     protected static $mixins = array();
     
@@ -57,7 +59,7 @@ abstract class Path {
     * @return  string
     */
     public static function lslash($str) {
-        return '/' . \ltrim($str, '/\\');
+        return '/' . \ltrim($str, static::delims);
     }
    
    /**
@@ -65,7 +67,7 @@ abstract class Path {
     * @return  string
     */   
     public static function rslash($str) {
-        return \rtrim($str, '/\\') . '/';
+        return \rtrim($str, static::delims) . '/';
     }
     
     /**
@@ -75,7 +77,7 @@ abstract class Path {
     public static function join() {
         $result = '';
         foreach (\func_get_args() as $n)
-            $result = $result ? \rtrim($result, '/\\') . '/' . \ltrim($n, '/\\') : $n;
+            $result = $result ? \rtrim($result, static::delims) . '/' . \ltrim($n, static::delims) : $n;
         return $result;
     }
     
@@ -283,6 +285,28 @@ abstract class Path {
      */
     public static function locate() {
         return static::find(\func_get_args(), 'is_readable');
+    }
+    
+    /**
+     * @return bool
+     */
+    public static function contains($hay, $needle) {
+        if (\is_scalar($hay))
+            return false !== \strpos($hay, $needle);
+        foreach ((array) $hay as $v)
+            if (self::contains($v, $needle))
+                return true;
+        return false;
+    }
+    
+    /**
+     * @return array
+     */
+    public static function search($list, $needle) {
+        $result = array();
+        foreach (\is_scalar($list) ? static::listPaths($list) : $list as $v)
+            static::contains($v, $needle) and $result[] = $v;
+        return $result;
     }
     
     /**
