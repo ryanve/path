@@ -50,10 +50,7 @@ abstract class Path {
      * @return  mixed
      */
     protected static function pass($fn, $value = null) {
-        if (null === $fn)
-            return $value;
-        $params = \func_get_args();
-        return \call_user_func_array(\array_shift($params), $params);
+        return null === $fn ? $value : \call_user_func_array($fn, \array_slice(\func_get_args(), 1));
     }
     
    /**
