@@ -83,7 +83,7 @@ abstract class Path {
      * @return  array
      */
     public static function split($path) {
-        $path = \trim(static::normalize($path), '/');
+        $path = \ltrim(static::normalize($path), '/');
         return '' === $path ? array() : \explode('/', $path);
     }
     
@@ -185,9 +185,9 @@ abstract class Path {
      * @param   string   $scheme 
      * @return  string
      */
-    public static function toUri($path, $scheme = 'http') {
+    public static function toUri($path = '', $scheme = 'http') {
         $uri = ($scheme ? $scheme . '://' : '//') . $_SERVER['SERVER_NAME'];
-        return static::join($uri, \str_replace($_SERVER['DOCUMENT_ROOT'], '', $path));
+        return $uri . static::lslash(\str_replace($_SERVER['DOCUMENT_ROOT'], '', $path));
     }
 
     /**
@@ -260,7 +260,7 @@ abstract class Path {
      * @return array
      */
     public static function group(array $list) {
-        $levels = array(); #map
+        $levels = array();
         foreach ($list as $i => $n)
             $levels[$i] = \substr_count($n, '/');
         # Ensure result is ordered and non-sparse.
