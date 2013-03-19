@@ -244,7 +244,7 @@ abstract class Path {
      */
     public static function listPaths($path) {
         $list = array();
-        foreach (\scandir($path) as $n)
+        foreach (\is_file($path) ? array(\basename($path)) : \scandir($path) as $n)
             static::isDot($n) or $list[] = static::normalize($n);
         return $list;
     }
