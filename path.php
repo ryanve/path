@@ -11,7 +11,7 @@ namespace airve;
 
 abstract class Path {
 
-    const delims = '/\\';
+    const slashes = '/\\';
     
     protected static $mixins = array();
     
@@ -58,21 +58,21 @@ abstract class Path {
      * @return  string
      */
     public static function lslash($str) {
-        return '/' . \ltrim($str, static::delims);
+        return '/' . \ltrim($str, static::slashes);
     }
    
     /**
      * @return  string
      */   
     public static function rslash($str) {
-        return \rtrim($str, static::delims) . '/';
+        return \rtrim($str, static::slashes) . '/';
     }
     
     /**
      * @return  string
      */   
     public static function trim($str) {
-        return \trim($str, static::delims);
+        return \trim($str, static::slashes);
     }
     
     /**
@@ -82,7 +82,7 @@ abstract class Path {
     public static function join() {
         $result = '';
         foreach (\func_get_args() as $n)
-            $result = $result ? \rtrim($result, static::delims) . '/' . \ltrim($n, static::delims) : $n;
+            $result = $result ? \rtrim($result, static::slashes) . '/' . \ltrim($n, static::slashes) : $n;
         return $result;
     }
 
