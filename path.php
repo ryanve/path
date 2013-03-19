@@ -111,6 +111,13 @@ abstract class Path {
     }
     
     /**
+     * @return  string
+     */
+    public static function ext($path) {
+        return \strrchr(\basename($path), '.');
+    }
+    
+    /**
      * @return  bool
      */
     public static function isPath($item) {
@@ -152,7 +159,7 @@ abstract class Path {
     public static function toAbs($item) {
         return \ctype_print($item) ? \realpath($item) : false;
     }
-    
+
     /**
      * Get a associative array containing the dir structure
      * @return array
