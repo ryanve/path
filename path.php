@@ -12,6 +12,12 @@ namespace airve;
 abstract class Path {
     
     protected static $mixins = array();
+    
+    public static function __callStatic($name, $params) {
+        if (isset(static::$mixins[$name]))
+            return \call_user_func_array(static::$mixins[$name], $params);
+        \trigger_error(__CLASS__ . "::$name is not callable.");
+    }
 
     public static function mixin($name, $fn = null) {
         if (\is_scalar($name))
@@ -20,19 +26,22 @@ abstract class Path {
             static::mixin($k, $v);
     }
     
-    # php.net/manual/en/language.oop5.overloading.php#object.callstatic
-    public static function __callStatic($name, $params) {
-        if (isset(static::$mixins[$name]))
-            return \call_user_func_array(static::$mixins[$name], $params);
-        \trigger_error(__CLASS__ . "::$name is not callable.");
-    }
-    
     /**
      * @param   string  $name
      * @return  string
      */
     public static function method($name) {
         return __CLASS__ . "::$name";
+    }
+    
+    /**
+     * @param   string  $name
+     * @return  string
+     */
+    public static function methods() {
+        return \array_merge(static::$mixins, \get_class_methods(__CLASS__));
+        #$methods = \array_merge(static::$mixins, \get_class_methods(__CLASS__));
+        #return \array_combine($methods, \array_map(__CLASS__ . '::method', $methods));
     }
     
     /**
@@ -86,15 +95,12 @@ abstract class Path {
     public static function dir($pathRelative) {
         return __DIR__ . static::lslash($pathRelative);
     }
-
+    
     /**
-     * @param   string   $path 
-     * @param   string   $scheme 
      * @return  string
      */
-    public static function toUri($path, $scheme = 'http') {
-        $uri = ($scheme ? $scheme . '://' : '//') . $_SERVER['SERVER_NAME'];
-        return static::join($uri, \str_replace($_SERVER['DOCUMENT_ROOT'], '', $path));
+    public static function ext($path) {
+        return \strrchr(\basename($path), '.');
     }
     
     /**
@@ -108,13 +114,6 @@ abstract class Path {
         $time = \array_map('filemtime', static::listPaths($path));
         $time = $time ? \max($time) : null;
         return $format && $time ? \date($format, $time) : $time;
-    }
-    
-    /**
-     * @return  string
-     */
-    public static function ext($path) {
-        return \strrchr(\basename($path), '.');
     }
     
     /**
@@ -158,6 +157,16 @@ abstract class Path {
      */
     public static function toAbs($item) {
         return \ctype_print($item) ? \realpath($item) : false;
+    }
+    
+    /**
+     * @param   string   $path 
+     * @param   string   $scheme 
+     * @return  string
+     */
+    public static function toUri($path, $scheme = 'http') {
+        $uri = ($scheme ? $scheme . '://' : '//') . $_SERVER['SERVER_NAME'];
+        return static::join($uri, \str_replace($_SERVER['DOCUMENT_ROOT'], '', $path));
     }
 
     /**
