@@ -288,23 +288,27 @@ abstract class Path {
     }
     
     /**
+     * @param  string|array|object  $haystack
+     * @param  string               $needle
      * @return bool
      */
-    public static function contains($hay, $needle) {
-        if (\is_scalar($hay))
-            return false !== \strpos($hay, $needle);
-        foreach ((array) $hay as $v)
+    public static function contains($haystack, $needle) {
+        if (\is_scalar($haystack))
+            return false !== \strpos($haystack, $needle);
+        foreach ((array) $haystack as $v)
             if (self::contains($v, $needle))
                 return true;
         return false;
     }
     
     /**
+     * @param  string|array|object  $path
+     * @param  string               $needle
      * @return array
      */
-    public static function search($list, $needle) {
+    public static function search($path, $needle) {
         $result = array();
-        foreach (\is_scalar($list) ? static::listPaths($list) : $list as $v)
+        foreach (\is_scalar($path) ? static::listPaths($path) : $path as $v)
             static::contains($v, $needle) and $result[] = $v;
         return $result;
     }
