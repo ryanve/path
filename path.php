@@ -318,11 +318,11 @@ abstract class Path {
     }
     
     /**
-     * Get the first readable path from the supplied args.
+     * Get the first existent path from the supplied args.
      * @return array
      */
     public static function locate() {
-        return static::find(\func_get_args(), 'is_readable');
+        return static::find(\func_get_args(), static::method('isPath'));
     }
     
     /**
