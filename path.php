@@ -54,20 +54,25 @@ abstract class Path {
         return null === $fn ? $value : \call_user_func_array($fn, \array_slice(\func_get_args(), 1));
     }
     
-   /**
-    * @param   string  $str 
-    * @return  string
-    */
+    /**
+     * @return  string
+     */
     public static function lslash($str) {
         return '/' . \ltrim($str, static::delims);
     }
    
-   /**
-    * @param   string  $str 
-    * @return  string
-    */   
+    /**
+     * @return  string
+     */   
     public static function rslash($str) {
         return \rtrim($str, static::delims) . '/';
+    }
+    
+    /**
+     * @return  string
+     */   
+    public static function trim($str) {
+        return \trim($str, static::delims);
     }
     
     /**
