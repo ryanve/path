@@ -145,19 +145,6 @@ abstract class Path {
         ($bool = static::isFile($path)) and include $path;
         return $bool;
     }
-
-    /**
-     * Get the modified time of a file or a directory. For directories,
-     * it gets the modified time of the most recently modified file.
-     * @param   string       $path     Full path to directory or file.
-     * @param   string       $format   Date string for use with date()
-     * @return  number|string|null
-     */
-    public static function mtime($path, $format = null) {
-        $time = \array_map('filemtime', static::listPaths($path));
-        $time = $time ? \max($time) : null;
-        return $format && $time ? \date($format, $time) : $time;
-    }
     
     /**
      * @return  bool
@@ -272,10 +259,23 @@ abstract class Path {
         foreach (static::listPaths($path) as $n) {
             if (\is_dir($base . $n)) {
                 foreach (static::listFiles($base . $n) as $file)
-                    $list[] = static::join($n, $file);
+                    $list[] = "$n/$file";
             } else { $list[] = $n; }
         }
-        return $list ? static::sort($list) : $list;
+        return $list;
+    }
+    
+    /**
+     * Get the modified time of a file or a directory. For directories,
+     * it gets the modified time of the most recently modified file.
+     * @param   string       $path     Full path to directory or file.
+     * @param   string       $format   Date string for use with date()
+     * @return  int|string|null
+     */
+    public static function mtime($path, $format = null) {
+        $time = static::listFiles($path);
+        $time = $time ? \max(\array_map('filemtime', $time)) : null;
+        return $format && $time ? \date($format, $time) : $time;
     }
     
     /**
@@ -379,7 +379,7 @@ abstract class Path {
      * @return string|null
      */    
     public static function findFile($path, callable $test) {
-        return static::find(static::listFiles($path), $test);
+        return static::find(static::sort(static::listFiles($path)), $test);
     }
     
     /** 
