@@ -326,10 +326,12 @@ abstract class Path {
     
     /**
      * Get the first existent path from the supplied args.
+     * @param  array|string  $needles
      * @return mixed
      */
-    public static function locate() {
-        return static::find(\func_get_args(), static::method('isPath'));
+    public static function locate($needles) {
+        \is_scalar($needles) and $needles = \func_get_args();
+        return static::find($needles, static::method('isPath'));
     }
     
     /**
