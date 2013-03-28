@@ -406,12 +406,10 @@ abstract class Path {
     }
     
     /** 
-     * @return object|array|null
+     * @return mixed
      */
     public static function getJson($path, callable $fn = null) {
-        return static::pass($fn, \is_scalar($path) ? \json_decode(
-            \file_get_contents($path)
-        ) : (null === $path ? null : $path));
+        return static::pass($fn, \is_scalar($path) ? \json_decode(\file_get_contents($path)) : $path);
     }
     
     /** 
