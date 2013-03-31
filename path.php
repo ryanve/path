@@ -132,10 +132,18 @@ abstract class Path {
     }
     
     /**
-     * @return  string
+     * @return  string|false
      */
     public static function ext($path) {
-        return \strrchr(\basename($path), '.');
+        # get the basename, remove any query params, get chars starting at last dot
+        return \strrchr(\strtok(\basename($path), '?'), '.');
+    }
+    
+    /**
+     * @return  string
+     */
+    public static function filename($path) {
+        return \pathinfo($path, PATHINFO_FILENAME);
     }
     
     /**
