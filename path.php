@@ -374,32 +374,47 @@ abstract class Path {
     
     /**
      * Get the first $list item than passes $test
+     * @param   array|object  $list
+     * @param   callable      $test
+     * @param   int           $goal  number of params to pass to $test
      * @return  mixed
      */
-    public function find($list, callable $test) {
+    public static function find($list, callable $test, $goal = null) {
         foreach ($list as $k => $v)
-            if (\call_user_func($test, $v, $k, $list))
+            if (\call_user_func_array($test, static::agree(array($v, $k, $list), $goal)))
                 return $v;
+    }
+    
+    /**
+     * @param   array      $arr    array to slice or pad depending on $goal
+     * @param   array|int  $goal   target length (or array to match length)
+     * @param   mixed      $filler value to pad with (when needed)
+     * @return  array
+     */
+    protected static function agree(array $arr, $goal, $filler = null) {
+        return \is_numeric($goal = \is_array($goal) ? \count($goal) : $goal) ? (
+            $goal < \count($arr) ? \array_slice($arr, 0, $goal) : \array_pad($arr, $goal, $filler)
+        ) : $arr;
     }
     
     /** 
      * @return string|null
      */
-    public static function findPath($path, callable $test) {
+    public static function findPath($path, callable $test, $goal = null) {
         return static::find(static::listPaths($path), $test);
     }
     
     /** 
      * @return string|null
      */    
-    public static function findFile($path, callable $test) {
+    public static function findFile($path, callable $test, $goal = null) {
         return static::find(static::sort(static::listFiles($path)), $test);
     }
     
     /** 
      * @return string|null
      */
-    public static function findDir($path, callable $test) {
+    public static function findDir($path, callable $test, $goal = null) {
         return static::find(static::listDirs($path), $test);
     }
     
