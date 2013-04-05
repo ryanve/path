@@ -398,27 +398,6 @@ abstract class Path {
     }
     
     /** 
-     * @return string|null
-     */
-    public static function findPath($path, callable $test, $goal = null) {
-        return static::find(static::listPaths($path), $test);
-    }
-    
-    /** 
-     * @return string|null
-     */    
-    public static function findFile($path, callable $test, $goal = null) {
-        return static::find(static::sort(static::listFiles($path)), $test);
-    }
-    
-    /** 
-     * @return string|null
-     */
-    public static function findDir($path, callable $test, $goal = null) {
-        return static::find(static::listDirs($path), $test);
-    }
-    
-    /** 
      * @return mixed
      */
     public static function getFile($path, callable $fn = null) {
