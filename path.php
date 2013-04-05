@@ -340,7 +340,7 @@ abstract class Path {
      * @return mixed
      */
     public static function locate($needles) {
-        \is_scalar($needles) and $needles = \func_get_args();
+        \is_array($needles) or $needles = \func_get_args();
         return static::find($needles, static::method('isPath'));
     }
     
@@ -360,13 +360,15 @@ abstract class Path {
     
     /**
      * @param  string|array|object  $path
-     * @param  string               $needle
+     * @param  string|array         $needles
      * @return array
      */
-    public static function search($path, $needle) {
+    public static function search($path, $needles) {
         $result = array();
+        \is_array($needles) or $needles = \array_slice(\func_get_args(), 1);
         foreach (\is_scalar($path) ? static::listPaths($path) : $path as $v)
-            static::contains($v, $needle) and $result[] = $v;
+            foreach ($needles as $needle)
+                static::contains($v, $needle) and $result[] = $v;
         return $result;
     }
     
