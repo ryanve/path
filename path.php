@@ -134,9 +134,12 @@ abstract class Path {
     /**
      * @return  string|false
      */
-    public static function ext($path) {
-        # get the basename, remove any query params, get chars starting at last dot
-        return \strrchr(\strtok(\basename($path), '?'), '.');
+    public static function ext($path, $add = null) {
+        if (null === $add)
+            # get the basename, remove any query params, get chars starting at last dot
+            return \strrchr(\strtok(\basename($path), '?'), '.');
+        $add = '.' . \ltrim($add, '.'); # add to path if missing
+        return \basename($path) === \basename($path, $add) ? \rtrim($path, '.') . $add : $path;
     }
     
     /**
