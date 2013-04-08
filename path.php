@@ -9,7 +9,7 @@
 
 namespace airve;
 
-abstract class Path {
+class Path {
 
     const slashes = '/\\';
     
