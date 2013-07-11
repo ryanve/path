@@ -2,7 +2,7 @@
 /**
  * @package   airve/path
  * @link      https://github.com/airve/path
- * @version   0.x
+ * @version   0.5.0
  * @license   MIT
  * @copyright 2013 Ryan Van Etten
  */
@@ -258,7 +258,11 @@ class Path {
      * @return array
      */
     public static function listDirs($path) {
-        return \array_filter(static::listPaths($path), 'is_dir');
+        $list = array();
+        $base = static::rslash($path);
+        foreach (static::listPaths($path) as $n)
+            \is_dir($base . $n) and $list[] = $n;
+        return $list;
     }
 
     /**
@@ -268,10 +272,10 @@ class Path {
         $list = array();
         $base = static::rslash($path);
         foreach (static::listPaths($path) as $n) {
-            if (\is_dir($base . $n)) {
-                foreach (static::listFiles($base . $n) as $file)
-                    $list[] = "$n/$file";
-            } else { $list[] = $n; }
+            if ( ! \is_dir($base . $n))
+                $list[] = $n;
+            else foreach (static::listFiles($base . $n) as $file)
+                $list[] = "$n/$file";
         }
         return $list;
     }
