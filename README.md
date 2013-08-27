@@ -1,4 +1,1 @@
-path
-====
-
-PHP filesystem utility module
+### `Path` has moved into [slash](https://github.com/ryanve/slash)
